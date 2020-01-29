@@ -1,0 +1,58 @@
+---
+title: "BDA201 - Assignment 1"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Created by Sean Leggett, January 29, 2020
+BDA201 2020 Winter Session
+
+Question 1
+What type of plot is this?
+
+Answer: The plot provided in the example is a line plot showing two variables: mobile phone antennae per 1,000 people and kidnapping rates per 100,000 people. Both for the country of Colombia. The line plot is a time series.
+
+Question 2
+Describe the phenomenon that is shown in the plot.
+
+Answer: by using two variables on the plot, it is implying a relationship between the two in a visual sense only. Rates may well be going down for kidnappings but relationship to cell phone availablility may be tenuous at best. The rate of change may be relevant but the hard scales of per 100,00 vs per 1,000 are substantially different.
+
+Question 3
+Which plot types asks you to draw a cause and effect relationship?
+
+A scatter plot is ideal for plotting relationship between two variables.
+
+Question 4
+Provide an estimated version of the plot proposed.
+
+Below is code to produce a scatter plot of the same (estimated) data in the example plot.
+
+```{r}
+colombia <- data.frame(
+  year = c("1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"),
+  kidnappings = c(4, 5, 6.5, 7, 8.5, 7.5, 7, 4.5, 3, 2, 1.5, 1, 0.5),
+  antennae = c(0.2, 0.3, 0.4, 0.5, 0.7, 0.8, 1, 2, 3, 4, 6.5, 7.5, 7)
+)
+
+colombiaplot <- plot(colombia$kidnappings, colombia$antennae, pch = 4)
+colombiaplot
+```
+
+Question 5
+What advantages does the provided plot have vs our plot?
+
+Answer:
+The original plot displays the same trend as the scatter plot (decreased kidnappings coinciding with increased mobile phone availability). However, by combining the two variables with the time series on X axis, the trend is certainly more obvious to the untrained eye.
+
+Question 6
+Provide plot showing variability in web traffic for each day of the week.
+
+Answer:
+```{r}
+traffic <- read.csv("website-traffic.csv")
+
+trafficplot <- boxplot(Visits~DayOfWeek, data = traffic)
+trafficplot
+```
+
