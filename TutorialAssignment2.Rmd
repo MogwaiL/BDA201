@@ -1,0 +1,62 @@
+---
+title: "Tutorial Assignment 2"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+Sean Leggett - BDA201 February 3, 2020
+
+## Quesion 1
+Use the summary() function to produce a numerical summary of the variables in the data set
+
+Answer:
+
+```{r}
+carsfile <- mtcars
+summary(carsfile)
+```
+
+## Question 2
+Use plot() function to produce a graph mpg and wt (weight). Is there a correlation between these two variables? 
+
+Answer:
+There appears to be a relationship. The lighter the car, the more efficient fuel consumption becomes.
+
+```{r}
+carsplot <- plot(carsfile$mpg, carsfile$wt,
+                 main = "Car Weight vs Miles Per Gallon",
+                 xlab = "Miles Per Gallon",
+                 ylab = "Weight"
+                 )
+carsplot
+```
+
+## Question 3
+Use the table() function to find out how many cars are automatic and how many are manual.
+
+Answer:
+Where mtcars$am = transmission type: 0 = Automatic, 1 = Manual
+We derive 19 automatic transmissions and 13 manual transmissions.
+
+There was no requirement to attempt formatting of the table function so I didn't attempt.
+
+```{r}
+carstable <- table(mtcars$am)
+carstable
+```
+
+## Question 4
+Using the subset() function separate the datasets into 2 datasets based on type of transmission.
+
+Answer:
+
+```{r}
+autocars <- subset(carsfile, am == 0)
+autocars
+```
+
+```{r}
+manualcars <- subset(carsfile, am == 1)
+manualcars
+```
+
