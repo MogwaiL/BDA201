@@ -1,0 +1,74 @@
+---
+title: "Weekly Assignment 2"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Sean Leggett - BDA201
+February 6, 2020
+
+## Question 1
+Examine the provided csv file and perform basic data inspection.
+
+Answer:
+No gaps exist in the data. The subjects have been anonymized. Fourteen fields exist. Column titles include some spaces. Last names are duplicated for Jane/John Doe.
+
+## Question 2
+What is the datatype of each feature?
+
+Answer:
+ID - Qualitative/ordinal
+Last Name - Qualitative/nominal
+First Name - Qualitative/nominal
+City - Qualitative/nominal
+State - Qualitative/nominal
+Gender - Qualitative/nominal
+Student Status - Qualitative/nominal
+Major - Qualitative/nominal
+Country - Qualitative/nominal
+Age - Quantitative/interval/continuous
+SAT - Quantitative/discrete
+Average score (grade) - Quantitative/discrete
+Height (in) - Quantitative/continuous
+Newspaper readership (times/wk) - Quantitative/continuous
+
+## Question 3
+Use summary() function to display a summary of the features.
+
+Answer:
+
+```{r}
+scores <- read.csv("Assignment_2_data.csv")
+summary(scores)
+```
+## Question 4 and Question 5
+How many males/females? How many graduate/undergraduate? Plot both using bar plots.
+
+Answer:
+Summary shows us that there are 15 each of males and females. Also, 15 each of graduates and undergraduates.
+
+```{r}
+barsplots <-
+par(mfrow=c(1,2))
+par(cex.axis=0.75)
+barplot(table(scores$Gender))
+barplot(table(scores$Student.Status))
+```
+
+## Question 6
+Is the average SAT score same for graduates and undergraduates? 
+
+Answer:
+Undergraduates have a slightly higher average(mean) SAT score.1,841.2 for graduates vs 1,856.6 for undergraduates.
+
+```{r}
+grads <- subset(scores, Student.Status == "Graduate")
+undergrads <- subset(scores, Student.Status == "Undergraduate")
+
+gradsavg <- mean(grads$SAT)
+underavg <- mean(undergrads$SAT)
+gradsavg
+underavg
+```
+
