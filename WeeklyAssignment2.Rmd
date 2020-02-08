@@ -17,21 +17,21 @@ No gaps exist in the data. The subjects have been anonymized. Fourteen fields ex
 ## Question 2
 What is the datatype of each feature?
 
-Answer:
-ID - Qualitative/ordinal
-Last Name - Qualitative/nominal
-First Name - Qualitative/nominal
-City - Qualitative/nominal
-State - Qualitative/nominal
-Gender - Qualitative/nominal
-Student Status - Qualitative/nominal
-Major - Qualitative/nominal
-Country - Qualitative/nominal
-Age - Quantitative/interval/continuous
-SAT - Quantitative/discrete
-Average score (grade) - Quantitative/discrete
-Height (in) - Quantitative/continuous
-Newspaper readership (times/wk) - Quantitative/continuous
+Answer:  
+* ID - Qualitative/ordinal  
+* Last Name - Qualitative/nominal  
+* First Name - Qualitative/nominal  
+* City - Qualitative/nominal  
+* State - Qualitative/nominal  
+* Gender - Qualitative/nominal  
+* Student Status - Qualitative/nominal  
+* Major - Qualitative/nominal  
+* Country - Qualitative/nominal  
+* Age - Quantitative/interval/continuous  
+* SAT - Quantitative/ratio/discrete  
+* Average score (grade) - Quantitative/ratio/continuous  
+* Height (in) - Quantitative/ratio/continuous  
+* Newspaper readership (times/wk) - Quantitative/ration/discrete  
 
 ## Question 3
 Use summary() function to display a summary of the features.
@@ -45,30 +45,123 @@ summary(scores)
 ## Question 4 and Question 5
 How many males/females? How many graduate/undergraduate? Plot both using bar plots.
 
-Answer:
+Answer:  
 Summary shows us that there are 15 each of males and females. Also, 15 each of graduates and undergraduates.
 
 ```{r}
-barsplots <-
-par(mfrow=c(1,2))
-par(cex.axis=0.75)
+par(mfrow=c(1,2)) ## draw layout for frames
+par(cex.axis=0.75) ## smaller text on x axis to fit
 barplot(table(scores$Gender))
 barplot(table(scores$Student.Status))
+mtext("Gender and Status Population", outer=TRUE,  cex=1, line = -.9)
+
 ```
 
 ## Question 6
 Is the average SAT score same for graduates and undergraduates? 
 
-Answer:
+Answer:  
 Undergraduates have a slightly higher average(mean) SAT score.1,841.2 for graduates vs 1,856.6 for undergraduates.
 
 ```{r}
+## subset dataframe based on status
 grads <- subset(scores, Student.Status == "Graduate")
 undergrads <- subset(scores, Student.Status == "Undergraduate")
 
+## calculate means
 gradsavg <- mean(grads$SAT)
 underavg <- mean(undergrads$SAT)
+
+## display
 gradsavg
 underavg
 ```
 
+## Question 7
+Between men or women? Who reads the newspaper more frequently and which group has more
+variation? (show using box plots)
+
+Answer:  
+The women from this sample read more newspapers weekly than men; the men from the sample have a greater variability in number of times per week they read newspapers. The plot below illustrates this finding.
+
+```{r}
+readershipplot <- boxplot(Newspaper.readership..times.wk. ~ Gender, data = scores,
+                      main = "Gender Based Weekly Newspaper Readership",
+                      xlab = "Gender",
+                      ylab = "Weekly Newspaper Reads")
+```
+
+## Question 8
+For age, Height, and Newspaper readership, calculate the following using R:
+a. Measures of location such as mean, median, and mode (where applicable).
+b. Measures of variation such as variance, standard deviation and IQR
+
+Answer:  
+The code below provides the measures requested:
+
+Part A: Mean and Median  
+Calculated and grouped into dataframe for ease of presentation.
+```{r}
+## calculate and assign means and medians
+agemean <- mean(scores$Age)
+heightmean <- mean(scores$Height..in.)
+readershipmean <- mean(scores$Newspaper.readership..times.wk.)
+agemedian <- median(scores$Age)
+heightmedian <- median(scores$Height..in.)
+readershipmedian <- median(scores$Newspaper.readership..times.wk.)
+
+## assign to dataframe for display purposes
+dfLocations <- data.frame("Variable" = c("Age", "Height", "Readership"), "Mean" = c(agemean, heightmean, readershipmean), "Median" = c(agemedian, heightmedian, readershipmedian))
+
+## display
+dfLocations
+```
+
+Part A: Mode  
+
+There is no function for mode (statistical mode) in base R. With a small dataset such as this, it is reasonable to simply sort and count.
+
+For Age we have a dual mode of 18 and 19 each with 5 observations.
+For Height we have a mode of 68 inches with 4 observations.
+For Readership we have a mode of 5 with 9 observations.
+
+There are packages to expand statistical functions and some include mode calculations. For larger datasets these would be hepful. Or else a programmatical approach leveraging some sort of count and max functions.
+
+```{r}
+agemodetest <- sort(scores$Age)
+agemodetest
+```
+
+```{r}
+heightmodetest <- sort(scores$Height..in.)
+heightmodetest
+```
+
+```{r}
+readershipmodetest <- sort(scores$Newspaper.readership..times.wk.)
+readershipmodetest
+```
+
+Part B: Measures of Variation  
+Calculated and grouped into dataframe for ease of presentation.
+```{r}
+## calculate and assign variance, SD & IQR
+agevariance <- var(scores$Age)
+heightvariance <- var(scores$Height..in.)
+readershipvariance <- var(scores$Newspaper.readership..times.wk.)
+sdage <- sd(scores$Age)
+sdheight <- sd(scores$Height..in.)
+sdreadership <- sd(scores$Newspaper.readership..times.wk.)
+ageIQR <- IQR(scores$Age)
+heightIQR <- IQR(scores$Height..in.)
+readershipIQR <- IQR(scores$Newspaper.readership..times.wk.)
+
+## combine in dataframe for presentation
+dfvariation <- data.frame("Variable" = c("Age", "Height", "Readership"), "Variance" = c(agevariance, heightvariance, readershipvariance), "Standard Deviation" = c(sdage, sdheight, sdreadership), "IQR" = c(ageIQR, heightIQR, readershipIQR))
+
+dfvariation
+```
+
+Reference Material:  
+1.	Course Content  
+2.	Sams Teach Yourself R in 24 Hours, Andy Nicholls, Richard Pugh, Aimee Gott. Sams, 2016.
