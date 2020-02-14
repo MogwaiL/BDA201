@@ -32,7 +32,7 @@ Generate 500 fair coin flips in R and show frequency of heads and tails with a b
 Answer:  
 ```{r}
 ## Where 1 = Heads and 2 = Tails
-##Y <- c('Heads','Tails')
+## Use sample() to generate the flips
 X <- data.frame ('Flip' = sample(1:2, 500, replace=T))
 par(cex = .75)
 flipplot <- hist(X$Flip,
