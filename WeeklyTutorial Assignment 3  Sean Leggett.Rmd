@@ -1,0 +1,45 @@
+---
+title: "Tutorial Assignment 3"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+BDA201 - Winter 2020
+Sean Leggett, February 13, 2020
+
+## Question 1  
+A card is drawn at random from a deck of cards. Find the probability of getting the Queen of Diamonds.
+
+Answer:  
+The odds of drawing the QH from a single deck of 52 cards with a single draw is 1 in 52, or 2% (rounded).
+
+## Question 2  
+How many total attempts would be needed to crack a 5 digit brief case lock!
+
+Answer:  
+The answer is 100,000.  
+In this situation the Mn rule applies as there are five different stages to achieve the desired experiment. There is no restriction on repeating numbers within the five digits. There are 10 options (0 to 9) for each stage.
+
+```{r}
+options(scipen = 999)
+A <- 10^5
+```
+
+## Question 3  
+Generate 500 fair coin flips in R and show frequency of heads and tails with a bar graph.  
+
+Answer:  
+```{r}
+## Where 1 = Heads and 2 = Tails
+##Y <- c('Heads','Tails')
+X <- data.frame ('Flip' = sample(1:2, 500, replace=T))
+par(cex = .75)
+flipplot <- hist(X$Flip,
+                 main = "Heads or Tails 500",
+                 labels = TRUE,
+                 xlab = 'Result of Flip (1= Heads, 2 = Tails)')
+
+```
+
+
