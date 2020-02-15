@@ -1,0 +1,59 @@
+---
+title: "Weekly Assignment 3"
+output: html_notebook
+---
+
+BDA201 - Winter 2020
+Sean Leggett - February 15, 2020
+
+## Question 1  
+1. A die is rolled and a coin is tossed, find the probability that the die shows an even number and
+the coin shows a tail.
+
+Answer:  
+We can use the additive rule to establish the union of probablities of even dice roll and tail coin toss.
+
+There is a base probability of rolling an even number on a fair die of 3/6 or 1 chance in 2.
+There is a base probability of 1 chance in 2 resulting in tails on a coin flip.
+
+P($A \cup B$) = P(A) + P(B) -P(A and B)
+P($A \cup B$) = 3/6 +1/2 - 2/8 = 1/4
+
+There is a 1 in 4 chance (25%) of rolling an even number and also flipping tails on a coin toss.
+
+## Question 2  
+Using R, simulate a fair 6 sided dice roll 1000 times. Generate sample space, then find and
+display mean value of the 1000 randomly generated roles?
+
+Answer:  
+
+```{r}
+sampleSpace = data.frame('Roll' = sample(1:6, 1000, replace = TRUE))
+x = mean(sampleSpace$Roll)
+x
+```
+
+## Question 3  
+ What is the probability of getting a sum of greater than 20 when 2 fair 12-sided dice are rolled.
+(Simulate this in R, by generating sample space)
+
+Answer:  
+To achieve a sum greater than 20 when rolling 2 12-sided dice, it requires a score of 11 or 12 on at least one die. Combinations that would result in a sum >29 are 10 + 11, 11 + 11, 11 +12 and 12 +12. Only 4 eventualities out of a possible 72 will satisfy the experiment.
+
+There is a 1 in 18 chance of generating a sum greater than 20, or a 5.6% chance. To validate/demonstrate this, please see the code below. We generate a sample of numbers between 2 and 24, 1000 times, to simulate 1000 times rolling 2 x 12-sided dice.
+
+```{r}
+a <- data.frame('Die1' = sample(1:12, 1000, replace = TRUE), 'Die2' = sample(1:12, 1000, replace = TRUE))
+b <- a$Die1+a$Die2
+c <- b >20
+d <- table(c == TRUE)
+d
+```
+
+Running this code three times yields 6.1% > 20, 7.9% and 6.4% rolls greater than 20.
+
+##Question 4  
+Using the mtcars dataset, Find the probability of choosing a car at random from the dataset that
+has more than 5 cylinders and has manual transmission as well.
+
+Answer:  
