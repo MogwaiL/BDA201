@@ -1,25 +1,27 @@
 ---
 title: "Weekly Assignment 3"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 BDA201 - Winter 2020
 Sean Leggett - February 15, 2020
 
 ## Question 1  
-1. A die is rolled and a coin is tossed, find the probability that the die shows an even number and
-the coin shows a tail.
+1. A die is rolled and a coin is tossed, find the probability that the die shows an even number and the coin shows a tail.
 
 Answer:  
-We can use the additive rule to establish the union of probablities of even dice roll and tail coin toss.
 
 There is a base probability of rolling an even number on a fair die of 3/6 or 1 chance in 2.
 There is a base probability of 1 chance in 2 resulting in tails on a coin flip.
 
-P($A \cup B$) = P(A) + P(B) -P(A and B)
-P($A \cup B$) = 3/6 +1/2 - 2/8 = 1/4
+P($A \cap B$) = P(A) x P(B)
+P($A \cap B$) = 3/6 x 1/2 = 3/12 = 1/4
 
 There is a 1 in 4 chance (25%) of rolling an even number and also flipping tails on a coin toss.
+
+We can achieve the same answer by multiplying the percentage probabilities of .5 x .5 to obtain the same result .25 probability.
 
 ## Question 2  
 Using R, simulate a fair 6 sided dice roll 1000 times. Generate sample space, then find and
@@ -28,32 +30,78 @@ display mean value of the 1000 randomly generated roles?
 Answer:  
 
 ```{r}
+## we are comfortable with data frame structure so tend to default to this even if others would suffice
 sampleSpace = data.frame('Roll' = sample(1:6, 1000, replace = TRUE))
 x = mean(sampleSpace$Roll)
 x
 ```
 
 ## Question 3  
- What is the probability of getting a sum of greater than 20 when 2 fair 12-sided dice are rolled.
-(Simulate this in R, by generating sample space)
+ What is the probability of getting a sum of greater than 20 when 2 fair 12-sided dice are rolled. (Simulate this in R, by generating sample space)
 
 Answer:  
-To achieve a sum greater than 20 when rolling 2 12-sided dice, it requires a score of 11 or 12 on at least one die. Combinations that would result in a sum >29 are 10 + 11, 11 + 11, 11 +12 and 12 +12. Only 4 eventualities out of a possible 72 will satisfy the experiment.
+We understand the rolling of two dice to be a single event rather than 2 separate events. That is to say a single roll of 2 dice rather than 2 events rolling each die. To achieve a sum greater than 20 when rolling 2 12-sided dice, it requires a score of 11 or 12 on at least one die. Combinations that would result in a sum >20 are 10 + 11, 11 + 11, 11 +12 and 12 +12. Only 4 eventualities out of a possible 72 will satisfy the experiment.
 
 There is a 1 in 18 chance of generating a sum greater than 20, or a 5.6% chance. To validate/demonstrate this, please see the code below. We generate a sample of numbers between 2 and 24, 1000 times, to simulate 1000 times rolling 2 x 12-sided dice.
 
 ```{r}
-a <- data.frame('Die1' = sample(1:12, 1000, replace = TRUE), 'Die2' = sample(1:12, 1000, replace = TRUE))
-b <- a$Die1+a$Die2
-c <- b >20
-d <- table(c == TRUE)
-d
+rollsum <- data.frame('Die1' = sample(1:12, 1000, replace = TRUE),
+                      'Die2' = sample(1:12, 1000, replace = TRUE))
+##calculate and add sum column to data frame
+rollsum$Total <- (rollsum$Die1 + rollsum$Die2)
+b <- sum(rollsum$Total >20) / 1000 * 100 
+## using the > criteria generates boolean results 
+## however in R TRUE and FALSE are counted as 1 and 0 also.
+##Thus permitting sum to be used for count of TRUE.
+b
 ```
 
-Running this code three times yields 6.1% > 20, 7.9% and 6.4% rolls greater than 20.
+Running this code three times yields 6.7%, 6.6% and 7.3% rolls greater than 20. We consider this sufficiently close to the projected probability of 5.6% given limited tries.
 
-##Question 4  
+## Question 4  
 Using the mtcars dataset, Find the probability of choosing a car at random from the dataset that
 has more than 5 cylinders and has manual transmission as well.
 
 Answer:  
+We understand the variable 'am' to denote transmission where 0 = automatic and 1 = manual. Therefore:
+
+```{r}
+transcyl <- read.csv('mtcars.csv')
+```
+
+Total number of cars = 32
+```{r}
+totalcars <- nrow(transcyl)
+totalcars
+```
+Number of cars with cylinders >5 = 21
+```{r}
+cyl6 <- sum(transcyl$cyl >5)
+cyl6
+```
+Number of cars with manual transmission = 19
+```{r}
+mxmission <- sum(transcyl$am == 0)
+mxmission
+```
+To find the intersection of probabilities cylinders > 5 and transmission == automatic:
+
+P($A \cap B$) = P(A) x P(B)
+P($cyl>5 \cap am==0$) = (21/32)0.66 + (19/32)0.59 = .39
+or 39% chance of randomly choosing a car with more than 5 cylinders and automatic transmission.
+
+## Question 5  
+Answer the above questions but with 5 cylinders OR manual transmission.
+ 
+ Answer:  
+ The formula for calculating probability of one event but not the other, given two events:
+ P(A$\Delta$B) = P(A) + P(B) - 2P(A$\cap$B)
+ P(A$\Delta$B) = .66 + .59 - .78 = .47
+ There is a 47% chance of choosing a car with either 5 cylinders or manual transmission.
+ 
+## Reference Material
+1. Course Material  
+2. Sams Teach Yourself R in 24 Hours, Andy Nicholls, Richard Pugh, Aimee Gott. Sams, 2016.  
+3. To validate results and help confirm our understanding, we used https://www.calculator.net/probability-calculator.html to test results.
+
+

@@ -1755,11 +1755,11 @@ summary {
 <ol style="list-style-type: decimal">
 <li>A die is rolled and a coin is tossed, find the probability that the die shows an even number and the coin shows a tail.</li>
 </ol>
-<p>Answer:<br />
-We can use the additive rule to establish the union of probablities of even dice roll and tail coin toss.</p>
+<p>Answer:</p>
 <p>There is a base probability of rolling an even number on a fair die of 3/6 or 1 chance in 2. There is a base probability of 1 chance in 2 resulting in tails on a coin flip.</p>
-<p>P(<span class="math inline">\(A \cup B\)</span>) = P(A) + P(B) -P(A and B) P(<span class="math inline">\(A \cup B\)</span>) = 3/6 +1/2 - 2/8 = 1/4</p>
+<p>P(<span class="math inline">\(A \cap B\)</span>) = P(A) x P(B) P(<span class="math inline">\(A \cap B\)</span>) = 3/6 x 1/2 = 3/12 = 1/4</p>
 <p>There is a 1 in 4 chance (25%) of rolling an even number and also flipping tails on a coin toss.</p>
+<p>We can achieve the same answer by multiplying the percentage probabilities of .5 x .5 to obtain the same result .25 probability.</p>
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
@@ -1767,14 +1767,11 @@ We can use the additive rule to establish the union of probablities of even dice
 <p>Answer:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FtcGxlU3BhY2UgPSBkYXRhLmZyYW1lKCdSb2xsJyA9IHNhbXBsZSgxOjYsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSlcbnggPSBtZWFuKHNhbXBsZVNwYWNlJFJvbGwpXG54XG5gYGAifQ== -->
-<pre class="r"><code>sampleSpace = data.frame(&#39;Roll&#39; = sample(1:6, 1000, replace = TRUE))
-x = mean(sampleSpace$Roll)
-x</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgd2UgYXJlIGNvbWZvcnRhYmxlIHdpdGggZGF0YSBmcmFtZSBzdHJ1Y3R1cmUgc28gdGVuZCB0byBkZWZhdWx0IHRvIHRoaXMgZXZlbiBpZiBvdGhlcnMgd291bGQgc3VmZmljZVxuc2FtcGxlU3BhY2UgPSBkYXRhLmZyYW1lKCdSb2xsJyA9IHNhbXBsZSgxOjYsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSlcbnggPSBtZWFuKHNhbXBsZVNwYWNlJFJvbGwpXG5gYGAifQ== -->
+<pre class="r"><code>## we are comfortable with data frame structure so tend to default to this even if others would suffice
+sampleSpace = data.frame(&#39;Roll&#39; = sample(1:6, 1000, replace = TRUE))
+x = mean(sampleSpace$Roll)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMuNDU2XG4ifQ== -->
-<pre><code>[1] 3.456</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1782,32 +1779,86 @@ x</code></pre>
 <h2>Question 3</h2>
 <p>What is the probability of getting a sum of greater than 20 when 2 fair 12-sided dice are rolled. (Simulate this in R, by generating sample space)</p>
 <p>Answer:<br />
-To achieve a sum greater than 20 when rolling 2 12-sided dice, it requires a score of 11 or 12 on at least one die. Combinations that would result in a sum &gt;29 are 10 + 11, 11 + 11, 11 +12 and 12 +12. Only 4 eventualities out of a possible 72 will satisfy the experiment.</p>
+We understand the rolling of two dice to be a single event rather than 2 separate events. That is to say a single roll of 2 dice rather than 2 events rolling each die. To achieve a sum greater than 20 when rolling 2 12-sided dice, it requires a score of 11 or 12 on at least one die. Combinations that would result in a sum &gt;20 are 10 + 11, 11 + 11, 11 +12 and 12 +12. Only 4 eventualities out of a possible 72 will satisfy the experiment.</p>
 <p>There is a 1 in 18 chance of generating a sum greater than 20, or a 5.6% chance. To validate/demonstrate this, please see the code below. We generate a sample of numbers between 2 and 24, 1000 times, to simulate 1000 times rolling 2 x 12-sided dice.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYSA8LSBkYXRhLmZyYW1lKCdEaWUxJyA9IHNhbXBsZSgxOjEyLCAxMDAwLCByZXBsYWNlID0gVFJVRSksICdEaWUyJyA9IHNhbXBsZSgxOjEyLCAxMDAwLCByZXBsYWNlID0gVFJVRSkpXG5iIDwtIGEkRGllMSthJERpZTJcbmMgPC0gYiA+MjBcbmQgPC0gdGFibGUoYyA9PSBUUlVFKVxuZFxuYGBgIn0= -->
-<pre class="r"><code>a &lt;- data.frame(&#39;Die1&#39; = sample(1:12, 1000, replace = TRUE), &#39;Die2&#39; = sample(1:12, 1000, replace = TRUE))
-b &lt;- a$Die1+a$Die2
-c &lt;- b &gt;20
-d &lt;- table(c == TRUE)
-d</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm9sbHN1bSA8LSBkYXRhLmZyYW1lKCdEaWUxJyA9IHNhbXBsZSgxOjEyLCAxMDAwLCByZXBsYWNlID0gVFJVRSksXG4gICAgICAgICAgICAgICAgICAgICAgJ0RpZTInID0gc2FtcGxlKDE6MTIsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSlcbiMjY2FsY3VsYXRlIGFuZCBhZGQgc3VtIGNvbHVtbiB0byBkYXRhIGZyYW1lXG5yb2xsc3VtJFRvdGFsIDwtIChyb2xsc3VtJERpZTEgKyByb2xsc3VtJERpZTIpXG5iIDwtIHN1bShyb2xsc3VtJFRvdGFsID4yMCkgLyAxMDAwICogMTAwIFxuIyMgdXNpbmcgdGhlID4gY3JpdGVyaWEgZ2VuZXJhdGVzIGJvb2xlYW4gcmVzdWx0cyBcbiMjIGhvd2V2ZXIgaW4gUiBUUlVFIGFuZCBGQUxTRSBhcmUgY291bnRlZCBhcyAxIGFuZCAwIGFsc28uXG4jI1RodXMgcGVybWl0dGluZyBzdW0gdG8gYmUgdXNlZCBmb3IgY291bnQgb2YgVFJVRS5cbmJcbmBgYCJ9 -->
+<pre class="r"><code>rollsum &lt;- data.frame(&#39;Die1&#39; = sample(1:12, 1000, replace = TRUE),
+                      &#39;Die2&#39; = sample(1:12, 1000, replace = TRUE))
+##calculate and add sum column to data frame
+rollsum$Total &lt;- (rollsum$Die1 + rollsum$Die2)
+b &lt;- sum(rollsum$Total &gt;20) / 1000 * 100 
+## using the &gt; criteria generates boolean results 
+## however in R TRUE and FALSE are counted as 1 and 0 also.
+##Thus permitting sum to be used for count of TRUE.
+b</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5GQUxTRSAgVFJVRSBcbiAgOTM5ICAgIDYxIFxuIn0= -->
-<pre><code>
-FALSE  TRUE 
-  939    61 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDcuMVxuIn0= -->
+<pre><code>[1] 7.1</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Running this code three times yields 6.1% &gt; 20, 7.9% and 6.4% rolls greater than 20.</p>
-<p>##Question 4<br />
-Using the mtcars dataset, Find the probability of choosing a car at random from the dataset that has more than 5 cylinders and has manual transmission as well.</p>
-<p>Answer:</p>
+<p>Running this code three times yields 6.7%, 6.6% and 7.3% rolls greater than 20. We consider this sufficiently close to the projected probability of 5.6% given limited tries.</p>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>Using the mtcars dataset, Find the probability of choosing a car at random from the dataset that has more than 5 cylinders and has manual transmission as well.</p>
+<p>Answer:<br />
+We understand the variable ‘am’ to denote transmission where 0 = automatic and 1 = manual. Therefore:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhbnNjeWwgPC0gcmVhZC5jc3YoJ210Y2Fycy5jc3YnKVxuYGBgIn0= -->
+<pre class="r"><code>transcyl &lt;- read.csv(&#39;mtcars.csv&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Total number of cars = 32</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG90YWxjYXJzIDwtIG5yb3codHJhbnNjeWwpXG5gYGAifQ== -->
+<pre class="r"><code>totalcars &lt;- nrow(transcyl)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Number of cars with cylinders &gt;5 = 21</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3lsNiA8LSBzdW0odHJhbnNjeWwkY3lsID41KVxuYGBgIn0= -->
+<pre class="r"><code>cyl6 &lt;- sum(transcyl$cyl &gt;5)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Number of cars with manual transmission = 19</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXhtaXNzaW9uIDwtIHN1bSh0cmFuc2N5bCRhbSA9PSAwKVxuYGBgIn0= -->
+<pre class="r"><code>mxmission &lt;- sum(transcyl$am == 0)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>To find the intersection of probabilities cylinders &gt; 5 and transmission == automatic:</p>
+<p>P(<span class="math inline">\(A \cap B\)</span>) = P(A) x P(B) P(<span class="math inline">\(cyl&gt;5 \cap am==0\)</span>) = (21/32)0.66 + (19/32)0.59 = .39 or 39% chance of randomly choosing a car with more than 5 cylinders and automatic transmission.</p>
+</div>
+<div id="question-5" class="section level2">
+<h2>Question 5</h2>
+<p>Answer the above questions but with 5 cylinders OR manual transmission.</p>
+<p>Answer:<br />
+The formula for calculating probability of one event but not the other, given two events: P(A<span class="math inline">\(\Delta\)</span>B) = P(A) + P(B) - 2P(A<span class="math inline">\(\cap\)</span>B) P(A<span class="math inline">\(\Delta\)</span>B) = .66 + .59 - .78 = .47 There is a 47% chance of choosing a car with either 5 cylinders or manual transmission.</p>
+</div>
+<div id="reference-material" class="section level2">
+<h2>Reference Material</h2>
+<ol style="list-style-type: decimal">
+<li>Course Material<br />
+</li>
+<li>Sams Teach Yourself R in 24 Hours, Andy Nicholls, Richard Pugh, Aimee Gott. Sams, 2016.<br />
+</li>
+<li>To validate results and help confirm our understanding, we used <a href="https://www.calculator.net/probability-calculator.html" class="uri">https://www.calculator.net/probability-calculator.html</a> to test results.</li>
+</ol>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWtseSBBc3NpZ25tZW50IDMiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpCREEyMDEgLSBXaW50ZXIgMjAyMA0KU2VhbiBMZWdnZXR0IC0gRmVicnVhcnkgMTUsIDIwMjANCg0KIyMgUXVlc3Rpb24gMSAgDQoxLiBBIGRpZSBpcyByb2xsZWQgYW5kIGEgY29pbiBpcyB0b3NzZWQsIGZpbmQgdGhlIHByb2JhYmlsaXR5IHRoYXQgdGhlIGRpZSBzaG93cyBhbiBldmVuIG51bWJlciBhbmQNCnRoZSBjb2luIHNob3dzIGEgdGFpbC4NCg0KQW5zd2VyOiAgDQpXZSBjYW4gdXNlIHRoZSBhZGRpdGl2ZSBydWxlIHRvIGVzdGFibGlzaCB0aGUgdW5pb24gb2YgcHJvYmFibGl0aWVzIG9mIGV2ZW4gZGljZSByb2xsIGFuZCB0YWlsIGNvaW4gdG9zcy4NCg0KVGhlcmUgaXMgYSBiYXNlIHByb2JhYmlsaXR5IG9mIHJvbGxpbmcgYW4gZXZlbiBudW1iZXIgb24gYSBmYWlyIGRpZSBvZiAzLzYgb3IgMSBjaGFuY2UgaW4gMi4NClRoZXJlIGlzIGEgYmFzZSBwcm9iYWJpbGl0eSBvZiAxIGNoYW5jZSBpbiAyIHJlc3VsdGluZyBpbiB0YWlscyBvbiBhIGNvaW4gZmxpcC4NCg0KUCgkQSBcY3VwIEIkKSA9IFAoQSkgKyBQKEIpIC1QKEEgYW5kIEIpDQpQKCRBIFxjdXAgQiQpID0gMy82ICsxLzIgLSAyLzggPSAxLzQNCg0KVGhlcmUgaXMgYSAxIGluIDQgY2hhbmNlICgyNSUpIG9mIHJvbGxpbmcgYW4gZXZlbiBudW1iZXIgYW5kIGFsc28gZmxpcHBpbmcgdGFpbHMgb24gYSBjb2luIHRvc3MuDQoNCiMjIFF1ZXN0aW9uIDIgIA0KVXNpbmcgUiwgc2ltdWxhdGUgYSBmYWlyIDYgc2lkZWQgZGljZSByb2xsIDEwMDAgdGltZXMuIEdlbmVyYXRlIHNhbXBsZSBzcGFjZSwgdGhlbiBmaW5kIGFuZA0KZGlzcGxheSBtZWFuIHZhbHVlIG9mIHRoZSAxMDAwIHJhbmRvbWx5IGdlbmVyYXRlZCByb2xlcz8NCg0KQW5zd2VyOiAgDQoNCmBgYHtyfQ0Kc2FtcGxlU3BhY2UgPSBkYXRhLmZyYW1lKCdSb2xsJyA9IHNhbXBsZSgxOjYsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSkNCnggPSBtZWFuKHNhbXBsZVNwYWNlJFJvbGwpDQp4DQpgYGANCg0KIyMgUXVlc3Rpb24gMyAgDQogV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgb2YgZ2V0dGluZyBhIHN1bSBvZiBncmVhdGVyIHRoYW4gMjAgd2hlbiAyIGZhaXIgMTItc2lkZWQgZGljZSBhcmUgcm9sbGVkLg0KKFNpbXVsYXRlIHRoaXMgaW4gUiwgYnkgZ2VuZXJhdGluZyBzYW1wbGUgc3BhY2UpDQoNCkFuc3dlcjogIA0KVG8gYWNoaWV2ZSBhIHN1bSBncmVhdGVyIHRoYW4gMjAgd2hlbiByb2xsaW5nIDIgMTItc2lkZWQgZGljZSwgaXQgcmVxdWlyZXMgYSBzY29yZSBvZiAxMSBvciAxMiBvbiBhdCBsZWFzdCBvbmUgZGllLiBDb21iaW5hdGlvbnMgdGhhdCB3b3VsZCByZXN1bHQgaW4gYSBzdW0gPjI5IGFyZSAxMCArIDExLCAxMSArIDExLCAxMSArMTIgYW5kIDEyICsxMi4gT25seSA0IGV2ZW50dWFsaXRpZXMgb3V0IG9mIGEgcG9zc2libGUgNzIgd2lsbCBzYXRpc2Z5IHRoZSBleHBlcmltZW50Lg0KDQpUaGVyZSBpcyBhIDEgaW4gMTggY2hhbmNlIG9mIGdlbmVyYXRpbmcgYSBzdW0gZ3JlYXRlciB0aGFuIDIwLCBvciBhIDUuNiUgY2hhbmNlLiBUbyB2YWxpZGF0ZS9kZW1vbnN0cmF0ZSB0aGlzLCBwbGVhc2Ugc2VlIHRoZSBjb2RlIGJlbG93LiBXZSBnZW5lcmF0ZSBhIHNhbXBsZSBvZiBudW1iZXJzIGJldHdlZW4gMiBhbmQgMjQsIDEwMDAgdGltZXMsIHRvIHNpbXVsYXRlIDEwMDAgdGltZXMgcm9sbGluZyAyIHggMTItc2lkZWQgZGljZS4NCg0KYGBge3J9DQphIDwtIGRhdGEuZnJhbWUoJ0RpZTEnID0gc2FtcGxlKDE6MTIsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSwgJ0RpZTInID0gc2FtcGxlKDE6MTIsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSkNCmIgPC0gYSREaWUxK2EkRGllMg0KYyA8LSBiID4yMA0KZCA8LSB0YWJsZShjID09IFRSVUUpDQpkDQpgYGANCg0KUnVubmluZyB0aGlzIGNvZGUgdGhyZWUgdGltZXMgeWllbGRzIDYuMSUgPiAyMCwgNy45JSBhbmQgNi40JSByb2xscyBncmVhdGVyIHRoYW4gMjAuDQoNCiMjUXVlc3Rpb24gNCAgDQpVc2luZyB0aGUgbXRjYXJzIGRhdGFzZXQsIEZpbmQgdGhlIHByb2JhYmlsaXR5IG9mIGNob29zaW5nIGEgY2FyIGF0IHJhbmRvbSBmcm9tIHRoZSBkYXRhc2V0IHRoYXQNCmhhcyBtb3JlIHRoYW4gNSBjeWxpbmRlcnMgYW5kIGhhcyBtYW51YWwgdHJhbnNtaXNzaW9uIGFzIHdlbGwuDQoNCkFuc3dlcjogIA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWtseSBBc3NpZ25tZW50IDMiDQpvdXRwdXQ6DQogIHBkZl9kb2N1bWVudDogZGVmYXVsdA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQotLS0NCg0KQkRBMjAxIC0gV2ludGVyIDIwMjANClNlYW4gTGVnZ2V0dCAtIEZlYnJ1YXJ5IDE1LCAyMDIwDQoNCiMjIFF1ZXN0aW9uIDEgIA0KMS4gQSBkaWUgaXMgcm9sbGVkIGFuZCBhIGNvaW4gaXMgdG9zc2VkLCBmaW5kIHRoZSBwcm9iYWJpbGl0eSB0aGF0IHRoZSBkaWUgc2hvd3MgYW4gZXZlbiBudW1iZXIgYW5kIHRoZSBjb2luIHNob3dzIGEgdGFpbC4NCg0KQW5zd2VyOiAgDQoNClRoZXJlIGlzIGEgYmFzZSBwcm9iYWJpbGl0eSBvZiByb2xsaW5nIGFuIGV2ZW4gbnVtYmVyIG9uIGEgZmFpciBkaWUgb2YgMy82IG9yIDEgY2hhbmNlIGluIDIuDQpUaGVyZSBpcyBhIGJhc2UgcHJvYmFiaWxpdHkgb2YgMSBjaGFuY2UgaW4gMiByZXN1bHRpbmcgaW4gdGFpbHMgb24gYSBjb2luIGZsaXAuDQoNClAoJEEgXGNhcCBCJCkgPSBQKEEpIHggUChCKQ0KUCgkQSBcY2FwIEIkKSA9IDMvNiB4IDEvMiA9IDMvMTIgPSAxLzQNCg0KVGhlcmUgaXMgYSAxIGluIDQgY2hhbmNlICgyNSUpIG9mIHJvbGxpbmcgYW4gZXZlbiBudW1iZXIgYW5kIGFsc28gZmxpcHBpbmcgdGFpbHMgb24gYSBjb2luIHRvc3MuDQoNCldlIGNhbiBhY2hpZXZlIHRoZSBzYW1lIGFuc3dlciBieSBtdWx0aXBseWluZyB0aGUgcGVyY2VudGFnZSBwcm9iYWJpbGl0aWVzIG9mIC41IHggLjUgdG8gb2J0YWluIHRoZSBzYW1lIHJlc3VsdCAuMjUgcHJvYmFiaWxpdHkuDQoNCiMjIFF1ZXN0aW9uIDIgIA0KVXNpbmcgUiwgc2ltdWxhdGUgYSBmYWlyIDYgc2lkZWQgZGljZSByb2xsIDEwMDAgdGltZXMuIEdlbmVyYXRlIHNhbXBsZSBzcGFjZSwgdGhlbiBmaW5kIGFuZA0KZGlzcGxheSBtZWFuIHZhbHVlIG9mIHRoZSAxMDAwIHJhbmRvbWx5IGdlbmVyYXRlZCByb2xlcz8NCg0KQW5zd2VyOiAgDQoNCmBgYHtyfQ0KIyMgd2UgYXJlIGNvbWZvcnRhYmxlIHdpdGggZGF0YSBmcmFtZSBzdHJ1Y3R1cmUgc28gdGVuZCB0byBkZWZhdWx0IHRvIHRoaXMgZXZlbiBpZiBvdGhlcnMgd291bGQgc3VmZmljZQ0Kc2FtcGxlU3BhY2UgPSBkYXRhLmZyYW1lKCdSb2xsJyA9IHNhbXBsZSgxOjYsIDEwMDAsIHJlcGxhY2UgPSBUUlVFKSkNCnggPSBtZWFuKHNhbXBsZVNwYWNlJFJvbGwpDQp4DQpgYGANCg0KIyMgUXVlc3Rpb24gMyAgDQogV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgb2YgZ2V0dGluZyBhIHN1bSBvZiBncmVhdGVyIHRoYW4gMjAgd2hlbiAyIGZhaXIgMTItc2lkZWQgZGljZSBhcmUgcm9sbGVkLiAoU2ltdWxhdGUgdGhpcyBpbiBSLCBieSBnZW5lcmF0aW5nIHNhbXBsZSBzcGFjZSkNCg0KQW5zd2VyOiAgDQpXZSB1bmRlcnN0YW5kIHRoZSByb2xsaW5nIG9mIHR3byBkaWNlIHRvIGJlIGEgc2luZ2xlIGV2ZW50IHJhdGhlciB0aGFuIDIgc2VwYXJhdGUgZXZlbnRzLiBUaGF0IGlzIHRvIHNheSBhIHNpbmdsZSByb2xsIG9mIDIgZGljZSByYXRoZXIgdGhhbiAyIGV2ZW50cyByb2xsaW5nIGVhY2ggZGllLiBUbyBhY2hpZXZlIGEgc3VtIGdyZWF0ZXIgdGhhbiAyMCB3aGVuIHJvbGxpbmcgMiAxMi1zaWRlZCBkaWNlLCBpdCByZXF1aXJlcyBhIHNjb3JlIG9mIDExIG9yIDEyIG9uIGF0IGxlYXN0IG9uZSBkaWUuIENvbWJpbmF0aW9ucyB0aGF0IHdvdWxkIHJlc3VsdCBpbiBhIHN1bSA+MjAgYXJlIDEwICsgMTEsIDExICsgMTEsIDExICsxMiBhbmQgMTIgKzEyLiBPbmx5IDQgZXZlbnR1YWxpdGllcyBvdXQgb2YgYSBwb3NzaWJsZSA3MiB3aWxsIHNhdGlzZnkgdGhlIGV4cGVyaW1lbnQuDQoNClRoZXJlIGlzIGEgMSBpbiAxOCBjaGFuY2Ugb2YgZ2VuZXJhdGluZyBhIHN1bSBncmVhdGVyIHRoYW4gMjAsIG9yIGEgNS42JSBjaGFuY2UuIFRvIHZhbGlkYXRlL2RlbW9uc3RyYXRlIHRoaXMsIHBsZWFzZSBzZWUgdGhlIGNvZGUgYmVsb3cuIFdlIGdlbmVyYXRlIGEgc2FtcGxlIG9mIG51bWJlcnMgYmV0d2VlbiAyIGFuZCAyNCwgMTAwMCB0aW1lcywgdG8gc2ltdWxhdGUgMTAwMCB0aW1lcyByb2xsaW5nIDIgeCAxMi1zaWRlZCBkaWNlLg0KDQpgYGB7cn0NCnJvbGxzdW0gPC0gZGF0YS5mcmFtZSgnRGllMScgPSBzYW1wbGUoMToxMiwgMTAwMCwgcmVwbGFjZSA9IFRSVUUpLA0KICAgICAgICAgICAgICAgICAgICAgICdEaWUyJyA9IHNhbXBsZSgxOjEyLCAxMDAwLCByZXBsYWNlID0gVFJVRSkpDQojI2NhbGN1bGF0ZSBhbmQgYWRkIHN1bSBjb2x1bW4gdG8gZGF0YSBmcmFtZQ0Kcm9sbHN1bSRUb3RhbCA8LSAocm9sbHN1bSREaWUxICsgcm9sbHN1bSREaWUyKQ0KYiA8LSBzdW0ocm9sbHN1bSRUb3RhbCA+MjApIC8gMTAwMCAqIDEwMCANCiMjIHVzaW5nIHRoZSA+IGNyaXRlcmlhIGdlbmVyYXRlcyBib29sZWFuIHJlc3VsdHMgDQojIyBob3dldmVyIGluIFIgVFJVRSBhbmQgRkFMU0UgYXJlIGNvdW50ZWQgYXMgMSBhbmQgMCBhbHNvLg0KIyNUaHVzIHBlcm1pdHRpbmcgc3VtIHRvIGJlIHVzZWQgZm9yIGNvdW50IG9mIFRSVUUuDQpiDQpgYGANCg0KUnVubmluZyB0aGlzIGNvZGUgdGhyZWUgdGltZXMgeWllbGRzIDYuNyUsIDYuNiUgYW5kIDcuMyUgcm9sbHMgZ3JlYXRlciB0aGFuIDIwLiBXZSBjb25zaWRlciB0aGlzIHN1ZmZpY2llbnRseSBjbG9zZSB0byB0aGUgcHJvamVjdGVkIHByb2JhYmlsaXR5IG9mIDUuNiUgZ2l2ZW4gbGltaXRlZCB0cmllcy4NCg0KIyMgUXVlc3Rpb24gNCAgDQpVc2luZyB0aGUgbXRjYXJzIGRhdGFzZXQsIEZpbmQgdGhlIHByb2JhYmlsaXR5IG9mIGNob29zaW5nIGEgY2FyIGF0IHJhbmRvbSBmcm9tIHRoZSBkYXRhc2V0IHRoYXQNCmhhcyBtb3JlIHRoYW4gNSBjeWxpbmRlcnMgYW5kIGhhcyBtYW51YWwgdHJhbnNtaXNzaW9uIGFzIHdlbGwuDQoNCkFuc3dlcjogIA0KV2UgdW5kZXJzdGFuZCB0aGUgdmFyaWFibGUgJ2FtJyB0byBkZW5vdGUgdHJhbnNtaXNzaW9uIHdoZXJlIDAgPSBhdXRvbWF0aWMgYW5kIDEgPSBtYW51YWwuIFRoZXJlZm9yZToNCg0KYGBge3J9DQp0cmFuc2N5bCA8LSByZWFkLmNzdignbXRjYXJzLmNzdicpDQpgYGANCg0KVG90YWwgbnVtYmVyIG9mIGNhcnMgPSAzMg0KYGBge3J9DQp0b3RhbGNhcnMgPC0gbnJvdyh0cmFuc2N5bCkNCnRvdGFsY2Fycw0KYGBgDQpOdW1iZXIgb2YgY2FycyB3aXRoIGN5bGluZGVycyA+NSA9IDIxDQpgYGB7cn0NCmN5bDYgPC0gc3VtKHRyYW5zY3lsJGN5bCA+NSkNCmN5bDYNCmBgYA0KTnVtYmVyIG9mIGNhcnMgd2l0aCBtYW51YWwgdHJhbnNtaXNzaW9uID0gMTkNCmBgYHtyfQ0KbXhtaXNzaW9uIDwtIHN1bSh0cmFuc2N5bCRhbSA9PSAwKQ0KbXhtaXNzaW9uDQpgYGANClRvIGZpbmQgdGhlIGludGVyc2VjdGlvbiBvZiBwcm9iYWJpbGl0aWVzIGN5bGluZGVycyA+IDUgYW5kIHRyYW5zbWlzc2lvbiA9PSBhdXRvbWF0aWM6DQoNClAoJEEgXGNhcCBCJCkgPSBQKEEpIHggUChCKQ0KUCgkY3lsPjUgXGNhcCBhbT09MCQpID0gKDIxLzMyKTAuNjYgKyAoMTkvMzIpMC41OSA9IC4zOQ0Kb3IgMzklIGNoYW5jZSBvZiByYW5kb21seSBjaG9vc2luZyBhIGNhciB3aXRoIG1vcmUgdGhhbiA1IGN5bGluZGVycyBhbmQgYXV0b21hdGljIHRyYW5zbWlzc2lvbi4NCg0KIyMgUXVlc3Rpb24gNSAgDQpBbnN3ZXIgdGhlIGFib3ZlIHF1ZXN0aW9ucyBidXQgd2l0aCA1IGN5bGluZGVycyBPUiBtYW51YWwgdHJhbnNtaXNzaW9uLg0KIA0KIEFuc3dlcjogIA0KIFRoZSBmb3JtdWxhIGZvciBjYWxjdWxhdGluZyBwcm9iYWJpbGl0eSBvZiBvbmUgZXZlbnQgYnV0IG5vdCB0aGUgb3RoZXIsIGdpdmVuIHR3byBldmVudHM6DQogUChBJFxEZWx0YSRCKSA9IFAoQSkgKyBQKEIpIC0gMlAoQSRcY2FwJEIpDQogUChBJFxEZWx0YSRCKSA9IC42NiArIC41OSAtIC43OCA9IC40Nw0KIFRoZXJlIGlzIGEgNDclIGNoYW5jZSBvZiBjaG9vc2luZyBhIGNhciB3aXRoIGVpdGhlciA1IGN5bGluZGVycyBvciBtYW51YWwgdHJhbnNtaXNzaW9uLg0KIA0KIyMgUmVmZXJlbmNlIE1hdGVyaWFsDQoxLiBDb3Vyc2UgTWF0ZXJpYWwgIA0KMi4gU2FtcyBUZWFjaCBZb3Vyc2VsZiBSIGluIDI0IEhvdXJzLCBBbmR5IE5pY2hvbGxzLCBSaWNoYXJkIFB1Z2gsIEFpbWVlIEdvdHQuIFNhbXMsIDIwMTYuICANCjMuIFRvIHZhbGlkYXRlIHJlc3VsdHMgYW5kIGhlbHAgY29uZmlybSBvdXIgdW5kZXJzdGFuZGluZywgd2UgdXNlZCBodHRwczovL3d3dy5jYWxjdWxhdG9yLm5ldC9wcm9iYWJpbGl0eS1jYWxjdWxhdG9yLmh0bWwgdG8gdGVzdCByZXN1bHRzLg0KDQoNCg==</div>
 
 
 
