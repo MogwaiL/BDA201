@@ -1,0 +1,35 @@
+---
+title: "Week 4 Tutorial Activity"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Sean Leggett - BDA201 Winter 2020
+February 24, 2020
+
+The average on a statistics test was 78 with a standard deviation of 8. If the test scores are normally distributed,
+
+find the probability that a student receives a test score less than 90.  
+(93%)  
+find the probability that a student receives a test score greater than 85  
+(40%)  
+find the probability that a student receives a test score between 60 and 80  
+(79%)  
+find the score k, such that there would be 93% probability for a randomly chosen score to be above k  
+(K = 66.2)
+
+```{r}
+less90 <- pnorm(90, mean = 78, sd = 8)
+less90
+
+great80 <- 1 - pnorm(80, mean = 78, sd = 8)
+great80
+
+twixt68 <- 0.8 - pnorm(60, mean = 78, sd = 8)
+twixt68
+
+kmeans93above <- qnorm(.07, mean = 78, sd = 8)
+kmeans93above
+```
+
