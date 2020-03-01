@@ -129,15 +129,45 @@ qqPlot(HamA$AvgTemp.c.,
 
 While we expected the average temperatures to fit closely to a normal distribution (intuitively) it was surprising to see a similar result with snowfall. QQPlots are definitely a valuable tool.
 
-Now a function to calculate and display z_scores.
+Now a function to calculate and display z_scores.  
+The formula for calculating z scores requires population mean and population standard deviation. In this instance, we do not have population statistics and must rely upon the sample data to infer.
+
+The formula we use is data point minus sample mean, divided by sample standard deviation.  
+
+We also interpret the question as requiring z scores for both snowfall and average temperature.
+
+Other options exist to achieve this but we have tried to stay within the scope of the current lessons and assignment.
 
 ```{r}
+## function to accept array and calculate z scores
 z_scores_array <- function(var_array) {
-  z_array <- (for (i in var_array) - mean(var_array)/sd(var_array)*sqrt((length(var_array))-1/length(var_array))
-  return(z_array))
+  x <- mean(var_array) #assign sample mean
+  y <- sd(var_array)   #assign sample standard deviation
+  #iterate through array calculating z score
+  z_scores <- for (i in (var_array)) {
+                    w <- (i - x)/y
+                    print(w)
+    }
+  
 }
 
-snowz <- z_scores_array(HamA$Snow.cm.)
-snowz
 ```
+
+```{r}
+#create arrays from existing dataframe
+snowarray <- array(HamA$Snow.cm.)
+temparray <- array(HamA$AvgTemp.c.)
+```
+
+
+```{r}
+#apply function to snowfall data
+snowz <- z_scores_array(snowarray)
+```
+
+```{r}
+#apply function to temperature data
+tempz <- z_scores_array(temparray)
+```
+
 
