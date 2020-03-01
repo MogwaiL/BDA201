@@ -144,11 +144,11 @@ z_scores_array <- function(var_array) {
   x <- mean(var_array) #assign sample mean
   y <- sd(var_array)   #assign sample standard deviation
   #iterate through array calculating z score
-  z_scores <- for (i in (var_array)) {
-                    w <- (i - x)/y
-                    print(w)
+  for (i in (var_array)) {
+                  w <- (i - x)/y
+                  print(w)
     }
-  
+
 }
 
 ```
@@ -170,4 +170,6 @@ snowz <- z_scores_array(snowarray)
 tempz <- z_scores_array(temparray)
 ```
 
-
+Reference Material:  
+1.	Course Content  
+2.	Sams Teach Yourself R in 24 Hours, Andy Nicholls, Richard Pugh, Aimee Gott. Sams, 2016.
