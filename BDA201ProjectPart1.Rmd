@@ -38,7 +38,9 @@ First, a histogram to view distribution of variable.
 ```{r}
 scatteramonia <- plot(amonia$Ammonia)
 scatteramonia
-amoniahist <- hist(amonia$Ammonia)
+amoniahist <- hist(amonia$Ammonia,
+                   main = "Distribution of Ammonia Measurements (mg/L)",
+                   xlab = "Quantity (mg/L)")
 amoniahist
 ```
 The scatter plot does not yield a visual assistance to determining distribution. However, the histogram implies a nice, neat normal distribution. Let's confirm using qqplots...
@@ -47,10 +49,11 @@ The scatter plot does not yield a visual assistance to determining distribution.
 qqnorm(amonia$Ammonia)
 qqline(amonia$Ammonia)
 qqPlot(amonia$Ammonia,
-       main = "Ammonia Distribution")
+       main = "Ammonia Distribution",
+       ylab = "Quantity (mg/L)")
 ```
 
-Interestingly, there is a trail off outside the 95% confidence intervals. Outliers may exist but at least visually there seems to be a trend towards the top end of the distribution.
+Interestingly, there is a trail off outside the 95% confidence intervals. Outliers may exist but at least visually there seems to be a drift towards the top end of the distribution.
 
 Question 3 - Statistics  
 
@@ -72,11 +75,14 @@ Question 4 - Non-Independence
 If the ammonia measurements were not actually independent, we would look for the possible correlated variable. Options for this correlated variable are not provided with the exercise. However, rather than variance, we would look for covariance between ammonia measurements and potentially related variables. P-Value and Correlation Coefficient would be important quantities to determine and establish a statistical relationship in this regard. We could refine an understanding of this relationship using methods such as Pearson or Spearman rank coefficients.
 
 Question 5 - Normal vs T-Student Distributions  
-To our relatively untrained skillset, the data seem to fit the normal distribution best. To our understanding, the T-Student Distribution may actually be better for this purpose in terms of having a sample rather than a population. However, this sample is quite large and as such, the T-Student Distribution will ultimately begin to look like the normal distribution with such a large sample size. We infer this data to be a population rather than a sample. Ultimately, we believe the normal distribution is most appropriate.
+To our relatively untrained skillset, the data seem to fit the normal distribution best. To our understanding, the T-Student Distribution may actually be better for this purpose in terms of having a sample rather than a population. However, this sample is quite large and as such, the T-Student Distribution will ultimately begin to look like the normal distribution with such a large sample size. We infer this data to be a population rather than a sample. Ultimately, we believe the normal distribution is most appropriate. From the evidence of the earlier qqplots and the slight misfit shown below, it may be interesting to investigate T-Student distribution in the future. However, we are comfortable with normal distribution.
 
 ```{r}
 ## plot with dnorm
-histnorm <- hist(amonia$Ammonia, probability = TRUE)
+histnorm <- hist(amonia$Ammonia, probability = TRUE,
+                 ylim = c(0, .05),
+                 main = "Ammonia Values and Normal Distribution",
+                 xlab = "Quantities (mg/L)")
 curve(dnorm(x, 36.1, 8.5), add=TRUE, col="blue", lwd=3)
 
 ```
@@ -101,7 +107,4 @@ For some sanity check we run summary() function on the amonia data.
 summary(amonia)
 ```
 
-```{r}
-qt(.647, 1439)
-```
 
