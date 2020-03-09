@@ -1,0 +1,107 @@
+---
+title: "course Project Part 1"
+output: html_notebook
+---
+
+Sean Leggett - BDA201 Winter 2020  
+March 7, 2020  
+
+```{r}
+## load required libraries
+library(car)
+```
+
+## Questions  
+1. The ammonia concentration in your wastewater treatment plant is measured every 6 hours. The data
+for one year is available (attached as ammonia.csv)  
+2. Use a visualization plot to determine if the data are from a normal distribution. And then confirm your
+answer using a suitable plot.  
+3. Estimate location and spread statistics assuming the data are from a normal distribution.  
+4. What if I told you that these measured values are not independent. How does it affect your answer from
+Question 3?  
+5. Among normal distribution, and student’s t distribution briefly explain which would be more
+suitable for this dataset?  
+6. What is the probability of having an ammonia concentration greater than 40 mg/L. (use an appropriate
+distribution)  
+7. There is 64.7% probability that a random reading will be less than what concentration of ammonia?   
+
+## Answers
+
+```{r}
+## read csv file into dataframe
+amonia <- read.csv("ammonia.csv")
+```
+Question 2 - visualization of distribution.  
+
+First, a histogram to view distribution of variable.
+
+```{r}
+scatteramonia <- plot(amonia$Ammonia)
+scatteramonia
+amoniahist <- hist(amonia$Ammonia)
+amoniahist
+```
+The scatter plot does not yield a visual assistance to determining distribution. However, the histogram implies a nice, neat normal distribution. Let's confirm using qqplots...
+
+```{r}
+qqnorm(amonia$Ammonia)
+qqline(amonia$Ammonia)
+qqPlot(amonia$Ammonia,
+       main = "Ammonia Distribution")
+```
+
+Interestingly, there is a trail off outside the 95% confidence intervals. Outliers may exist but at least visually there seems to be a trend towards the top end of the distribution.
+
+Question 3 - Statistics  
+
+A box plot should provide most of the statistics for us in terms of location and spread. We establish this first but will repeat the specific calculations below for confirmation. Summary() function would also yield some of the statistics for us but we infer that manual calculation is preferred in this exercise.
+
+```{r}
+amoniabox <- boxplot(amonia$Ammonia)
+amoniamean <- mean(amonia$Ammonia)
+amoniamedian <- median(amonia$Ammonia)
+amoniaspread <- var(amonia$Ammonia)
+amoniasd <- sd(amonia$Ammonia)
+amoniamean
+amoniamedian
+amoniaspread
+amoniasd
+```
+
+Question 4 - Non-Independence  
+If the ammonia measurements were not actually independent, we would look for the possible correlated variable. Options for this correlated variable are not provided with the exercise. However, rather than variance, we would look for covariance between ammonia measurements and potentially related variables. P-Value and Correlation Coefficient would be important quantities to determine and establish a statistical relationship in this regard. We could refine an understanding of this relationship using methods such as Pearson or Spearman rank coefficients.
+
+Question 5 - Normal vs T-Student Distributions  
+To our relatively untrained skillset, the data seem to fit the normal distribution best. To our understanding, the T-Student Distribution may actually be better for this purpose in terms of having a sample rather than a population. However, this sample is quite large and as such, the T-Student Distribution will ultimately begin to look like the normal distribution with such a large sample size. We infer this data to be a population rather than a sample. Ultimately, we believe the normal distribution is most appropriate.
+
+```{r}
+## plot with dnorm
+histnorm <- hist(amonia$Ammonia, probability = TRUE)
+curve(dnorm(x, 36.1, 8.5), add=TRUE, col="blue", lwd=3)
+
+```
+Question 6 - Probability of amonia > 40mg/l  
+Answer using normal distribution is 32.33354%
+```{r}
+great40 <- 1 - pnorm(40, mean = 36.09499, sd = 8.518928)
+great40*100
+```
+
+Question 7 - 64.7% probability that a random reading will be less than what concentration of ammonia?  
+
+Answer using normal distribution is 39.30862 mg/l
+
+```{r}
+less64 <- qnorm(.647, mean = 36.09499, sd = 8.518928)
+less64
+```
+For some sanity check we run summary() function on the amonia data.
+
+```{r}
+summary(amonia)
+```
+
+```{r}
+qt(.647, 1439)
+```
+
