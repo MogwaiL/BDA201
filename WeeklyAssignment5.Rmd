@@ -1,6 +1,8 @@
 ---
 title: "Weekly Assignment 5"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 Sean Leggett - BDA201 - Winter 2020  
@@ -27,8 +29,8 @@ Let's look at some values and plots...
 
 ```{r}
 ## manual calculation of Pearson coefficient of correlation
-x <- muggings$Officers
-y <- muggings$Muggings
+x <- muggings$Muggings
+y <- muggings$Officers
 X <- x - mean(x)
 Y <- y - mean(y)
 r <- sum(X * Y) / sqrt(sum(X*X) * sum(Y*Y))
@@ -41,9 +43,49 @@ cor(muggings$Muggings, muggings$Officers)
 
 A scatter plot:  
 ```{r}
-mugplot <- plot(muggings$Officers, muggings$Muggings)
+mugplot <- plot(muggings$Officers, muggings$Muggings,
+                main = "Muggings vs Patrolmen",
+                xlab = "Officers",
+                ylab = "Muggings")
 mugplot
 ```
 There would appear to be a strong negative correlation. More officers = less muggings.
 
+Question 2 - P-Value  
 
+We opted for the cor.test() function to yield a variety of critical points including P-Value of 0.000003853 which is statistically significant. The P-Value indicates the probability that future randomly chosen values for these variables will demonstrate the same close relationship we have displayed thus far.
+```{r}
+cor.test(muggings$Muggings, muggings$Officers, method = "pearson")
+```
+
+```{r}
+mugmodel <- lm(muggings$Officers ~ muggings$Muggings)
+regres1 <- plot(muggings$Officers, muggings$Muggings,
+                main = "Muggings vs Patrolmen",
+                xlab = "Officers",
+                ylab = "Muggings")
+abline(lm(muggings$Muggings ~ muggings$Officers), col = "brown")
+abline(h = mean(muggings$Officers))
+regres1
+```
+slope is 9.7798 and Y-Intercept is -.4932
+
+Question 5 - Residuals  
+We can calculate residulas using R. Code and output below shows the residuals for all 10 data points. The point (4,7) is the 5th entry, or residual -1.9203779. The pair in the 8th position (12,5) demonstrates the highest residual at 2.2712551
+
+```{r}
+mugres <- resid(mugmodel)
+mugres
+```
+
+Question 6 - RSquared  
+The RSquared value can be obtained or calculated in a number of ways. The summary() function includes this value and it can be accessed directly using $ if preferred. RSquared can also be easily calculated as R*R given that we know R from Question 1 (0.9690786)
+
+```{r}
+r2 <- .9690786^2
+r2
+summary(mugmodel)$r.squared
+summary(mugmodel)
+```
+
+This means that 94% of variation is explained by the regression line and 6% remains statistically unexplained by the model.
