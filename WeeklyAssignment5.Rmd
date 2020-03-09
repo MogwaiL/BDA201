@@ -1,0 +1,49 @@
+---
+title: "Weekly Assignment 5"
+output: html_notebook
+---
+
+Sean Leggett - BDA201 - Winter 2020  
+March 8, 2020  
+
+1. Is the data correlated? What does the correlation mean? What is the pearson coefficient of correlation?
+Calculate by implementing the formula in r and then use the r function “cor” to verify.  
+2. What is the p-value for the pearson correlation coefficient? What is meant by calculated p-value?  
+3. Calculate the regression line for this data, what is the slope and y-intercept?  
+4. Show the data plotted along with the regression line in brown color.  
+5. What is residual for the observation (4, 7), which observation has the largest residual?  
+6. What percentage of variation is explained by the regression line? What percent of variation is due to
+random and unexplained factors?  
+
+```{r}
+## generate dataframe
+muggings <- data.frame("Officers" = c(10, 15, 16, 1, 4, 6, 18, 12, 14, 7),
+                       "Muggings" = c(5, 2, 1, 9, 7, 8, 1, 5, 3, 6)
+)
+muggings
+```
+Question 1 - Correlated?  
+Let's look at some values and plots...  
+
+```{r}
+## manual calculation of Pearson coefficient of correlation
+x <- muggings$Officers
+y <- muggings$Muggings
+X <- x - mean(x)
+Y <- y - mean(y)
+r <- sum(X * Y) / sqrt(sum(X*X) * sum(Y*Y))
+r
+## using cor() function
+cor(muggings$Muggings, muggings$Officers)
+
+```
+
+
+A scatter plot:  
+```{r}
+mugplot <- plot(muggings$Officers, muggings$Muggings)
+mugplot
+```
+There would appear to be a strong negative correlation. More officers = less muggings.
+
+
