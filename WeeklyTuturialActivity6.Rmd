@@ -1,0 +1,70 @@
+---
+title: "Tutorial Activity 6"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Sean Leggett - BDA201 Winter 2020
+March 10, 2020
+
+## Question  
+A) The data
+B) Which variable would make more sense as response variable? Is this relationship positive or negative?  
+C) Using the data above create a linear model in R, what is the slope, y-intercept and coefficient of determination.  
+D) Using the equation for the linear regression that you calculated, estimate the monthly income of an employee at this company who spends 5000 dollars per month on recreation. Is this interpolation or extrapolation?  
+
+## Answers  
+A) I want to work where these people are paid these amounts per month. Probably never going to happen but here is the data in a dataframe:
+
+```{r}
+spend <- data.frame("Income" = c(41200, 50100, 52000, 66000, 44500, 37700, 73500, 37500, 56700, 35600),
+                    "Expenditure" = c(2400, 2650, 2350, 4950, 3100, 2500, 5106, 3100, 2900, 1750)
+)
+spend
+```
+
+
+B) We chose expenditure as the response variable. A large income obviously provides more potential for discretionary expenditure on entertainment. There are many other variables at play in terms of disposition, how people are with money, etc. But it requires income to spend. Therefore, we anticipate people with more income will spend more on entertainment.
+
+Is the relationship positive or negative? It is positive.
+
+```{r}
+cor.test(spend$Income, spend$Expenditure)
+```
+We see a small P-value and a correlation coefficient of 84% which convinces us there is a positive relationship. Let's confirm via a plot. We will add a regression line to confirm which also anticipates the answer to the next question by establishing an lm.
+
+```{r}
+spendlm <- lm(Income ~ Expenditure, data = spend)
+spendplot <- plot(spend$Expenditure, spend$Income,
+                  main = "Income vs Entertainment Expenditure",
+                  xlab = "Entertainment Spending",
+                  ylab = "Monthly Income")
+abline(lm(spend$Income ~ spend$Expenditure))
+spendplot
+```
+Scatter plot shows some variability but extreme monthly salary certainly leads to extreme entertainment expenses. However, we belive the expected trend holds true.
+
+C) Linear Model and Data. Model created for previous abline...  
+Printing the linear model provides the following regression line information including intercept of 19370.109, slope of 
+9.774
+
+```{r}
+spendlm
+```
+
+We can also easily determine coefficient of determination (R-Squared) by using the summary() function for our linear model.  
+This value is 0.7063
+
+```{r}
+summary(spendlm)
+```
+
+D) Predict Income of a 5000 expenditure...  
+We can use the predict() function to achieve this. We establish a new dataframe containing the value we wish to test and pass to the predict() function. This produces an answer of 68240.28 which eyeballs to a correct value when checking original dataset with expenditures close to 5000. This answer is interpolated rather than extrapolated. We have not simply added amounts to forecast. We have developed a model that assesses relationships and predicts based on statistical fit with behaviour between two variables.
+
+```{r}
+newexpense <- data.frame("Expenditure" = 5000)
+predict(spendlm, newdata = newexpense)
+```
+
