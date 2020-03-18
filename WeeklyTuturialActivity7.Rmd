@@ -1,0 +1,53 @@
+---
+title: "Week 7 Tutorial Activity"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Sean Leggett BDA201 Winter 2020  
+March 18, 2020  
+
+## Questions  
+Find the confidence intervals using R and interpret them.
+
+1) A random sample of 325 statistics tutorials was selected from the past 5 years and the number of students absent from each one recorded. The results were x = 10.5 and s = 3.9 absences. Estimate the mean number of absences per tutorial over the past 5 years with 90% confidence and write its interpretation.  
+2) A quality control technician wants to estimate the proportion of soda cans that are under filled. He randomly samples 220 cans of soda and finds 11 under filled cans. Find the 98% confidence interval and write its interpretation.  
+
+## Answers  
+
+1) Struggled a little bit assigning values to their correct place and understanding this question. Assigning in my mind, not in R :) I took x = 10.5 to mean the estimated value and the sample mean. I understood s = 3.9 to be the standard deviation.
+
+Accordingly...
+
+```{r}
+x <- 10.5
+z_score <- qnorm(.950) ##qnorm of .950 for 90% confidence
+n <- 325
+s <- 3.9
+
+lower_bound <- x - z_score * s/sqrt(n)
+lower_bound
+
+upper_bound <- x + z_score * s/sqrt(n)
+upper_bound
+
+```
+
+The average or mean number of absences from tutorials over the past five years would fall between the range of 10.14416 on the lower end and 10.85584 absences on the higher end, 90% of the time.
+
+2) This also presented some challenges trying to estimate appropriate values for calculation. We rely here on normal distribution substantially. Awkward variable names so as to not conflict with prior code chunk.
+```{r}
+empty <- 11
+z_score_can <- qnorm(.980) ##qnorm of .980 for 98% confidence
+sample_test <- 220
+sd_can <- 4 ## estimating sd based on normal distribution
+
+lower_bound_can <- empty - z_score_can * sd_can/sqrt(sample_test)
+lower_bound_can
+
+upper_bound_can <- empty + z_score_can * sd_can/sqrt(sample_test)
+upper_bound_can
+```
+
+Therefore, 98% of the time, in 220 randomly sampled cans, there will be between 10.44615 and 11.55385 under-filled cans.
