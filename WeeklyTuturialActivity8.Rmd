@@ -1,0 +1,77 @@
+---
+title: "Weekly Tutorial Activity 8"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Sean Leggett BDA 201  
+Winter 2020 - March 28, 2020  
+
+## Questions  
+1) We want to test with 95 percent confidence interval whether the volume of a shipment of lumber is as usual (mu=39000 cubic feet). Use rnorm function in R to to generate 75 shipments with mean: 36500 and sd: 2000.
+Use set.seed(0) before rnorm to regenerate the same data if required.
+On the simulated data test Ho: mu = 39000  
+
+2) The CEO of a large electric utility claims that 79 percent of his 1,000,000 customers are very satisfied with the service they receive. To test this claim, the local newspaper surveyed 100 customers, using simple random sampling. Among the sampled customers, 73 percent say they are very satisfied. Based on these findings, can we reject the CEO's hypothesis that 79% of the customers are very satisfied? Use a 0.04 level of significance.  
+
+3) The CEO changed the claim and now says that at least 79% are satisfied, keeping everything else the same, how does this change your analysis?
+
+## Answers  
+Question 1)  
+
+Generate test dataset  
+
+```{r}
+set.seed(0)
+shipments <- rnorm(75, 36500, 2000)
+shipments
+```
+$H_{0}$: shipment = 39,000 cu ft
+$H_{a}$: shipment not equal to 39,000 cu ft
+
+Calculate the test statistic  
+
+```{r}
+n = 75
+mu = 39000
+s = 2000
+smean <- 36500
+
+z_score <- (mu - smean) / (s/sqrt(n))
+z_score
+
+```
+A z-score this far off center is hugely unlikely. We can also test for p-value:
+
+```{r}
+pnorm(z_score, lower.tail = FALSE)
+1 - pnorm(z_score)
+```
+
+Accordingly, we can reject the null hypothesis.  
+
+Question 2)  
+
+$H_{0}$: very satisfied = 79%
+$H_{a}$: very satisfied < 79%
+
+In this case based on the provided data, we are looking to establish the confidence interval for these proportions.
+
+```{r}
+nn <- 100
+pp <- 73/100
+qq <- 1-pp
+pp - qnorm(.98) * sqrt(pp*qq/nn)
+pp + qnorm(.98) * sqrt(pp*qq/nn)
+```
+
+Which tells us from the television station sample, that their true random mean lies between 64% and 82%, or can be stated as 73% +/- 9%. The executive's claim of 79% very statisfied is on the higher side of this bound but certainly is within tolerance.
+
+Question 3)  
+We won't perform any math on this change of claim. If the executive would like to change the test and objective of the hypothesis, we can start with a newly commissioned exercise. This is simply gaming the system.  
+
+Now this becomes a marketing exercise trying to find the highest percentage that can be attached to a usable marketing term.
+
+However, we can say that reducing the quality factor will likely provide an even more accurate range. We are suspicious of their motives.
+
