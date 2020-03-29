@@ -1,0 +1,191 @@
+---
+title: "Class Project Part 2"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Sean Leggett - BDA201 Winter 2020  
+March 29, 2020  
+
+## Questions  
+1. Investigate whether there is correlation between X3 and X2, What is Pearson correlation coefficient,
+How do you interpret it.  
+
+2. Does a linear relationship exist between X3 and X2 ? What about X3 and X1 ? How can you determine
+that definitively? Hint: residuals  
+
+3. Make a linear model with X1 as the target variable. How good is the model? What measure of
+goodness did you use and why? Plot the regression line on the data as a dashed line.  
+
+4. Extend you model to be multiple linear regression. Which variables/features should be included in the
+model and why? Are there any features that should be ignored?  
+
+5. Find the mean violent crime rate per 100,000 residents (X2), of our sample of 50 cities, and use it to
+estimate the mean crime rate of all cities in US, with a confidence interval of 98%. Interpret your
+estimation.  
+
+6. Mean overall reported crime rate per 1 million residents (X1) in cities across the US, is claimed to be
+520 by the federal government. Based on the sample of 50 cities that you have in the dataset, can you
+say with 5% significance level that the federal government claim is incorrect. Answer this question by
+conducting a hypothesis test.  
+
+## Answers  
+First, read in data. We saved xls file as csv to maintain standards of the course although R does have packages enabling read direct from Excel files.  
+
+```{r}
+## load libraries
+library(car)
+##import data to data frame
+crimedata <- read.csv("crime_data_standard.csv")
+crimedata
+```
+
+Question 1)  
+First we will plot the two variables to check visibly for correlation pattern. We will be looking at annual police funding data compared to violent crime rate.
+
+```{r}
+q1plot <- plot(crimedata$X3, crimedata$X2,
+               main = "Funding and Violent Crime",
+               xlab = "Violent Crime per 100,000 Residents",
+               ylab = "Annual Funding per Resident ($)")
+q1plot
+```
+Intuitively, we would expect a correlation between spending and crime rate. However, no obvious visual pattern emerges, however, we can test correlation coefficients.
+
+```{r}
+## cor.test default method appears to be pearson but we specify for clarity
+cor.test(crimedata$X2, crimedata$X3, method = "pearson")
+```
+We can infer a strong correlation here by evaluating p-value against $\alpha$. A p-value lower than $\alpha$ implies a strong correlation and in this case p-value = 0.0001583 which is less than $\alpha$ = 0.05. Having observed this, we do not have a particularly strong coefficient. Coefficients closer to either 1 or -1 in absolute terms imply a very strong correlation. An absolute value approaching zero implies no correlation. The results here imply only a mild correlation between annual funding per resident and violent crime per 100,000 residents.
+
+Question 2)  
+First, let's have a look at the X3 and X2 model..  
+
+```{r}
+model1 <- lm(crimedata$X3 ~ crimedata$X2)
+summary(model1)
+```
+In this case, r-squared tells us that only ~ 26% of variation is explained by the linear relationship. Not strong.  
+
+For the case of X3 vs X1, let's examine:  
+
+```{r}
+model2 <- lm(crimedata$X1 ~ crimedata$X3)
+summary(model2)
+```
+The residuals in both cases demonstrate the amount of data not explained by the linear model. Both sets of residuals are substantial but X1 vs X3 is slightly more linear in relationship when compared to X2 vs X3.
+
+We can plot these for illustration purposes. These plots illustrate residuals vs line of fit.
+
+```{r}
+par(mfrow = c(1, 2))
+plot1 <- plot(model1, which = 1)
+title("X3 vs X2", line = 1.2)
+plot2 <- plot(model2, which = 1)
+title("X3 vs X1", line = 1.2)
+```
+
+Question 3)  
+Model with X1 vs X3.  
+
+```{r}
+model3 <- lm(X1 ~ X3, data = crimedata)
+## plot using model as line of fit
+plot3 <- plot(crimedata$X3, crimedata$X1,
+              main = "Crime Rate and Police Funding",
+              xlab = "Reported Crime Rate per 1 Million Residents",
+              ylab = "Annual Police Funding per Resident ($)")
+abline(model3, lty =2)
+```
+In Question 2, we actually built this model and reviewed the plot of residuals vs fit. We will not reproduce here for space but will repeat our observations. This particular linear model does not show great fit. We assessed R-Squared for goodness of fit and find it underwhelming at 0.2843. This means that only ~28% of variation is described by the linear relationship.  
+We took R-Squared as a measure of goodness of fit since we are dealing with a single linear model.  
+
+We will take a moment here to evaluate to the distribution of both variables (X1 and X3)
+
+```{r}
+par(mfrow = c(1,2))
+qqPlot(crimedata$X1,
+       main = "Distribution Check X1")
+qqPlot(crimedata$X3,
+       main = "Distribution Check X3")
+```
+
+We can see that neither variable is particularly normal in its distribution which may cause problems in future calculations.
+
+Question 4)  
+We are going to extend our model to include one variable, X5. We may need to add more later but intuitively, we believe that X5 may show the greatest impact. X5 shows the percent of 16 to 19 year old residents who are neither in highschool nor graduates of highschool. All other available variables basically extend education criteria beyond this. We expect X5 to show an impact on the model even if additional variables can refine it further.  Hence...  
+
+```{r}
+model4 <- lm(X1 ~ X3 + X5, data = crimedata)
+summary(model4)
+```
+
+Since this model is now multi-faceted, we evaluated Adjusted R-Squared. We see little improvement by adding X5 variable, which surprises us in terms of what we expected intuitively.    
+
+By evaluating the F-statistic and its p-value, we can see that there is an inclination that adding X5 has improved the fit of the model.
+
+Let's try expanding this. Rather than looking at young people not in highschool or graduated from highschool, we will look at educational attainment as opposed to lack thereof. Perhaps X4 will help improve the value of this model. Adults 25 years old and above who have completed four years of highschool which we interpret as the basis for all other variables related to education attainment.
+
+```{r}
+model5 <- lm(X1 ~ X3 + X4, data = crimedata)
+summary(model5)
+```
+
+A marked improvement but not a particularly strong relationship. However, the addition of no other variable produces a better R-Squared score except one, X2. X2 is the reported violent crime rate, which we completely expect to be related to overall crime rates. We view X2 as a function of X1 rather than a predictor. The signifcance of the relationship is obvious intuitively but produced below for illustration.  We see that 56% of variation is explained by this relationship.
+
+The improvement on the p-value of the F-statistic is also substantial (0.00009838 vs previous attempt at 0.0001557)
+
+```{r}
+model6 <- lm(X1 ~ X2, data = crimedata)
+summary(model6)
+```
+Therefore, we choose X1~X3 + X4 as the best possible fit for predicting future values of X1.  
+
+Question 5)  
+Use mean crime rate per 100,000 residents to forecast mean violent crime rate for all cities with 98% confidence interval.  
+
+```{r}
+crimemean <- mean(crimedata$X2)
+## we will also require standard deviation of our sample
+crimesd <- sd(crimedata$X2)
+
+xbar = crimemean
+z_alpha <- qnorm(0.98)
+n <- 50
+s <- crimesd
+
+lowerbound <- crimemean - z_alpha * crimesd/sqrt(n)
+upperbound <- crimemean + z_alpha * crimesd/sqrt(n)
+meanrange <- (upperbound - lowerbound) /2
+meanrange
+crimemean
+```
+
+Which tells us the mean estimate for all cities is 616.18 +/- 166.64 violent crimes per 100,000 residents, 98 percent of the time.
+
+Question 6)  
+Prove that government claim of mean crime rate per 1 million residents of 520 is incorrect.  
+
+$H_{0}$: $\mu$ = 520
+$H_{a}$ $\mu$ != 520
+
+```{r}
+totalcrime <- mean(crimedata$X1)
+sdtotalcrime <- sd(crimedata$X1)
+x = 520
+m = totalcrime
+n = 50
+s = sdtotalcrime
+
+z_stat <- (x - m) / (s/sqrt(n))
+z_stat
+```
+
+```{r}
+alpha03 <- 0.05 ## distribution of 95% confidence interval
+qnorm(alpha03)
+qnorm(1-alpha03)
+pnorm(z_stat)
+```
+The calculated z-score test statistic and the comparison of p-value vs $\alpha$ of 0.05 tells us that we can reject the null hypothesis $\mu$ = 520 within a required 95% confidence interval. That is to say, there is not sufficient statistical evidence to confirm the government's claim. We can accept the alternate hypothesis $\mu$ != 520
